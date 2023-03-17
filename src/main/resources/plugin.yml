@@ -1,0 +1,4 @@
+name: RespawnSMP
+version: '${project.version}'
+main: dev.fluyd.respawnsmp.RespawnSMP
+api-version: 1.19
