@@ -28,7 +28,8 @@ public class RespawnSMPRecipe {
                         || result.getType() == Material.LIGHT_GRAY_BED || result.getType() == Material.CYAN_BED
                         || result.getType() == Material.PURPLE_BED || result.getType() == Material.BLUE_BED
                         || result.getType() == Material.BROWN_BED || result.getType() == Material.GREEN_BED
-                        || result.getType() == Material.RED_BED || result.getType() == Material.BLACK_BED) {
+                        || result.getType() == Material.RED_BED || result.getType() == Material.BLACK_BED
+                        || result.getType() == Material.COMPASS) {
                     // Remove the bed recipe
                     it.remove();
                 }
@@ -55,5 +56,30 @@ public class RespawnSMPRecipe {
 
         // Add the recipe to the server
         Bukkit.getServer().addRecipe(bedRecipe);
+    }
+
+    public static void addReviveItem() {
+        // DIAMOND DIAMOND DIAMOND
+        // DIAMOND NETHERITE_INGOT DIAMOND
+        // DIAMOND DIAMOND DIAMOND
+        NamespacedKey reviveKey = new NamespacedKey(RespawnSMP.INSTANCE, "revive_item");
+        ShapedRecipe reviveItemRecipe = new ShapedRecipe(reviveKey, new ItemStack(Material.BARRIER));
+        reviveItemRecipe.shape("DDD", "DND", "DDD");
+        reviveItemRecipe.setIngredient('D', Material.DIAMOND);
+        reviveItemRecipe.setIngredient('N', Material.NETHERITE_INGOT);
+        Bukkit.addRecipe(reviveItemRecipe);
+    }
+
+    public static void addCompassRecipe() {
+        // AIR DIAMOND AIR
+        // DIAMOND GOLDEN_APPLE DIAMOND
+        // AIR DIAMOND AIR
+
+        NamespacedKey locatorKey = new NamespacedKey(RespawnSMP.INSTANCE, "bed_locator");
+        ShapedRecipe bedLocatorRecipe = new ShapedRecipe(locatorKey, new ItemStack(Material.COMPASS));
+        bedLocatorRecipe.shape(" A ", "ADA", " A ");
+        bedLocatorRecipe.setIngredient('A', Material.DIAMOND);
+        bedLocatorRecipe.setIngredient('D', Material.GOLDEN_APPLE);
+        Bukkit.addRecipe(bedLocatorRecipe);
     }
 }

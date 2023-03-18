@@ -2,3 +2,16 @@ name: RespawnSMP
 version: '${project.version}'
 main: dev.fluyd.respawnsmp.RespawnSMP
 api-version: 1.19
+commands:
+  setplacedbeds:
+    description: Set the amount of placed beds
+    usage: /setplacedbeds <amount> [player]
+    permission: respawnsmp.setplacedbeds
+  spawnpoints:
+    description: Get the amount of spawnpoints
+    usage: /spawnpoints <player>
+    permission: respawnsmp.spawnpoints
+  clearspawnpoints:
+    description: Clear the spawnpoints of a player
+    usage: /clearspawnpoints <player>
+    permission: respawnsmp.clearspawnpoints
