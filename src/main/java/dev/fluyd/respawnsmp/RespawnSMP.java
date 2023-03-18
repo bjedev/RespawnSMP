@@ -24,7 +24,7 @@ public final class RespawnSMP extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         // Delete all bed recipes so the only one remaining is our custom one
-//        RespawnSMPRecipe.removeRecipies();
+        RespawnSMPRecipe.removeRecipies();
         RespawnSMPRecipe.addRecipe();
         RespawnSMPRecipe.addCompassRecipe();
         RespawnSMPRecipe.addReviveItem();

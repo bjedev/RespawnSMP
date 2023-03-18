@@ -8,30 +8,22 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Listeners implements Listener {
     @EventHandler
     public void onBedBreak(BlockBreakEvent e) {
         // Check if the broken block is a bed
         if (e.getBlock().getType() == Material.RED_BED) {
-            Player player = e.getPlayer();
-
-            // Only subtract 1 from the amount of beds the player has placed if the player has placed more than 0 beds
-            if (RespawnSMP.INSTANCE.amountPlaced.get(player) > 0) {
-                // Break the bed and decrease the amount of beds the player has placed
-                RespawnSMP.INSTANCE.amountPlaced.put(player, RespawnSMP.INSTANCE.amountPlaced.get(player) - 1);
-                removePossibleSpawnpoint(player, e.getBlock().getLocation());
-            }
+            removePossibleSpawnpoint(e.getBlock().getLocation());
         }
     }
     @EventHandler
@@ -165,12 +157,30 @@ public class Listeners implements Listener {
         RespawnSMP.INSTANCE.spawnPoints.put(player, possibleSpawnpoints);
     }
 
-    public void removePossibleSpawnpoint(Player player, Location location) {
-        // Get the player's possible spawnpoints
-        ArrayList<Location> possibleSpawnpoints = RespawnSMP.INSTANCE.spawnPoints.get(player);
+    public void removePossibleSpawnpoint(Location location) {
+        // Delete all spawnpoints in a radius of 2 blocks of the location
+        HashMap<Player, Location> toRemove = new HashMap<>();
+        for (Player player : RespawnSMP.INSTANCE.spawnPoints.keySet()) {
+            ArrayList<Location> possibleSpawnpoints = RespawnSMP.INSTANCE.spawnPoints.get(player);
 
-        // Remove the specified spawnpoint from the list
-        possibleSpawnpoints.remove(location);
+            for (Location spawnpoint : possibleSpawnpoints) {
+                if (spawnpoint.distanceSquared(location) <= 4) {
+                    toRemove.put(player, spawnpoint);
+                }
+            }
+
+            RespawnSMP.INSTANCE.spawnPoints.put(player, possibleSpawnpoints);
+        }
+
+        for (Player player : toRemove.keySet()) {
+            RespawnSMP.INSTANCE.spawnPoints.get(player).remove(toRemove.get(player));
+
+            // Remove from amountPlaced if the amount is more than 0
+            if (RespawnSMP.INSTANCE.amountPlaced.get(player) > 0) {
+                RespawnSMP.INSTANCE.amountPlaced.put(player, RespawnSMP.INSTANCE.amountPlaced.get(player) - 1);
+            }
+        }
+
     }
 
     @EventHandler
